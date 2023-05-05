@@ -1,0 +1,56 @@
+from nltk import ngrams
+import random, string
+w = ''
+f = open('names.txt')
+d = {}
+d1 = {}
+d2 = {}
+lines = f.readlines()
+
+for i in range(0, len(lines)):
+    for j in range(0, len(lines[i]) - 2):
+        x = list(ngrams(lines[i], 2))
+        try:
+            d[x[j][0] + x[j][1]] += 1
+        except:
+            d.update({x[j][0] + x[j][1]: 1})
+
+for i in range(0, len(lines)):
+    c1 = '^' + lines[i][0]
+    try:
+        d1[c1] += 1
+    except:
+        d1.update({c1: 1})
+
+for i in range(0, len(lines)):
+    c2 = lines[i][-2] + '$'
+    try:
+        d2[c2] += 1
+    except:
+        d2.update({c2: 1})
+
+rand = random.choice(string.ascii_letters)
+w = w + rand
+w = w.lower()
+
+k = []
+v = []
+nl = []
+
+for i in range(0, random.randint(3, 6)):
+    for j in range(0, len(d.items())):
+        if list(d.items())[j][0][0] == w[-1]:
+            nl.append(list(d.items())[j])
+    for n in range(0, len(nl)):
+        k.append(nl[n][0])
+        v.append(nl[n][1])
+    w = w + random.choices(k, weights=v)[0][1]
+    k = []
+    v = []
+    nl = []
+
+print(w.title())
+d.update(d1)
+d.update(d2)
+print(d)
+
